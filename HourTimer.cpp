@@ -1,4 +1,5 @@
 #include "HourTimer.h"
+#include "DefaultValues.h"
 
 
 HourTimer::HourTimer() : seconds_(0), targetSeconds_(0) {
@@ -9,10 +10,10 @@ void HourTimer::update() {
 }
 
 void HourTimer::reset() {
-  seconds = 0;
+  seconds_ = 0;
 }
 
-bool HourTimer::timeReached() {
+bool HourTimer::targetTimeReached() {
   if (seconds_ >= targetSeconds_) {
     return true;
   }

@@ -24,7 +24,7 @@ class HourTimer {
     //! 
     //! @return True if target time reached, False otherwise.
     //!
-    bool targeTimeReached();
+    bool targetTimeReached();
     
     //!
     //! Function to set the target time for the timer.
