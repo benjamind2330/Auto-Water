@@ -9,8 +9,8 @@ namespace DefaultValue {
   static const unsigned int SecondsInMinute = 60;
 
   // Other time variables.   
-  static const unsigned int LoopRate 		= 10; //ms
-  static const int 			LoopsInSecond	= 100;
+  static const unsigned int LoopRate 		= 100; //ms
+  static const int 			LoopsInSecond	= LoopRate / 1000;
 
 
   // Watering Constants

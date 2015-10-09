@@ -79,4 +79,17 @@ extern "C" void __cxa_pure_virtual() {;}
 #define portInputRegister(P)
 #define portModeRegister(P)
 #include <Auto_Watering.ino>
+#include <AFMotor.cpp>
+#include <AFMotor.h>
+#include <DefaultValues.h>
+#include <GlobalVariables.cpp>
+#include <GlobalVariables.h>
+#include <HourTimer.cpp>
+#include <HourTimer.h>
+#include <LEDControl.cpp>
+#include <LEDControl.h>
+#include <PumpControl.cpp>
+#include <PumpControl.h>
+#include <WaterSensorControl.cpp>
+#include <WaterSensorControl.h>
 #endif

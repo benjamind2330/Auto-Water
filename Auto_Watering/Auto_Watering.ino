@@ -1,6 +1,7 @@
 
 #include "DefaultValues.h"
 #include "GlobalVariables.h"
+#include "LEDControl.h"
 
 enum WateringState { START_IDLING, IDLING, START_WATERING, WATERING, WATER_LOW };
 WateringState currentState;
@@ -22,6 +23,9 @@ void setup() {
 		Serial.println("Failed to initialize global objects.");
 	}
 
+	// Initialize the LED.
+	LED::initialize();
+	LED::clearLed();
 }
 
 
@@ -51,6 +55,7 @@ void loop() {
 	switch (currentState) {
 	case START_IDLING:
 	{
+		LED::setLedBlue();
 		if (firstTimeInState) {
 			Serial.println("START_IDLING");
 			firstTimeInState = false;
@@ -66,6 +71,7 @@ void loop() {
 
 	case IDLING:
 	{
+		LED::setLedGreen();
 		if (firstTimeInState) {
 			firstTimeInState = false;
 			Serial.println("IDLING");
@@ -91,6 +97,7 @@ void loop() {
 
 	case START_WATERING:
 	{
+		LED::setLedRed();
 		if (firstTimeInState) {
 			firstTimeInState = false;
 			Serial.println("START_WATERING");
