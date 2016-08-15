@@ -9,7 +9,7 @@ namespace DefaultValue {
   static const unsigned int SecondsInMinute = 60;
 
   // Other time variables.   
-  static const unsigned int LoopRate 		= 100; //ms
+  static const unsigned int LoopRate 		= 1000; //ms
   static const int 			LoopsInSecond	= LoopRate / 1000;
 
 

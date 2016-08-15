@@ -101,10 +101,14 @@ void loop() {
 
 	case WATER_LOW:
 	{
-		if (firstTimeInState) Serial.println("WATER_LOW");
+		if (firstTimeInState) { 
+                    Serial.println("WATER_LOW");
+                    firstTimeInState = false;
+                }
                 PumpControl::pumpOff();
                 
                 if (!WaterLevelSensor::isWaterLow()) {
+                  firstTimeInState = true;
                   currentState = waterLowSavedState;
                 }
 	}
@@ -149,30 +153,13 @@ void loop() {
         //!
         //! Check the water level
         //!
-        if (WaterLevelSensor::isWaterLow()) {
-          Serial.println("Water low!");
-          switch (currentState) {
-            case START_IDLING:
-            case IDLING:
-              waterLowSavedState = START_IDLING;
-              break;
-            
-            case START_WATERING:
-            case WATERING:
-              waterLowSavedState = START_WATERING;
-              break;
-          }
-          
+        if (WaterLevelSensor::isWaterLow() && currentState != WATER_LOW) {
+          waterLowSavedState = currentState; 
           currentState = WATER_LOW;
-          
+          firstTimeInState = true;
         }
             
-            
-          
-          
-
-
-	//!
+ 	//!
 	//! Fix the loop rate.
 	//!
 	unsigned long remainingTime = DefaultValue::LoopRate - (millis() - timeStart);

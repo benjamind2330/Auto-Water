@@ -3,10 +3,10 @@
 
 namespace LedConstants
 {
-	const unsigned int LedGroundPin = 8;
-	const unsigned int LedBluePin = 9;
-	const unsigned int LedGreenPin = 10;
-	const unsigned int LedRedPin = 11;
+	const unsigned int LedGroundPin = 19;
+	const unsigned int LedBluePin = 18;
+	const unsigned int LedGreenPin = 17;
+	const unsigned int LedRedPin = 16;
 }
 
 namespace LED
