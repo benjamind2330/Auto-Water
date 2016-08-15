@@ -2,9 +2,12 @@
 #include "DefaultValues.h"
 #include "GlobalVariables.h"
 #include "LEDControl.h"
+#include "PumpControl.h"
+#include "WaterSensorControl.h"
 
 enum WateringState { START_IDLING, IDLING, START_WATERING, WATERING, WATER_LOW };
 WateringState currentState;
+WateringState waterLowSavedState;
 
 bool firstTimeInState = true;
 
@@ -26,15 +29,24 @@ void setup() {
 	// Initialize the LED.
 	LED::initialize();
 	LED::clearLed();
+
+        // Initialize the pump control.
+        PumpControl::initializePumpControl();
+        
+        // Initialize the water level sensor.
+        WaterLevelSensor::initWaterLevelSensor();
+        
+
 }
 
 
 
 void loop() {
-
-	// Get the loop start time. 
+  
+  	// Get the loop start time. 
 	unsigned long timeStart = millis();
-
+        Serial.print("Current State: ");
+        Serial.println(currentState);
 
 	//!
 	//! Perform update functions as necassary. 
@@ -56,6 +68,7 @@ void loop() {
 	case START_IDLING:
 	{
 		LED::setLedBlue();
+                PumpControl::pumpOff();
 		if (firstTimeInState) {
 			Serial.println("START_IDLING");
 			firstTimeInState = false;
@@ -72,6 +85,7 @@ void loop() {
 	case IDLING:
 	{
 		LED::setLedGreen();
+                PumpControl::pumpOff();
 		if (firstTimeInState) {
 			firstTimeInState = false;
 			Serial.println("IDLING");
@@ -88,10 +102,11 @@ void loop() {
 	case WATER_LOW:
 	{
 		if (firstTimeInState) Serial.println("WATER_LOW");
-
-
-
-
+                PumpControl::pumpOff();
+                
+                if (!WaterLevelSensor::isWaterLow()) {
+                  currentState = waterLowSavedState;
+                }
 	}
 	break;
 
@@ -102,7 +117,9 @@ void loop() {
 			firstTimeInState = false;
 			Serial.println("START_WATERING");
 		}
-
+   
+                PumpControl::pumpOn();
+   
 		Global::timeWatering.reset();
 
 		currentState = WATERING;
@@ -129,6 +146,32 @@ void loop() {
 	}
 
 
+        //!
+        //! Check the water level
+        //!
+        if (WaterLevelSensor::isWaterLow()) {
+          Serial.println("Water low!");
+          switch (currentState) {
+            case START_IDLING:
+            case IDLING:
+              waterLowSavedState = START_IDLING;
+              break;
+            
+            case START_WATERING:
+            case WATERING:
+              waterLowSavedState = START_WATERING;
+              break;
+          }
+          
+          currentState = WATER_LOW;
+          
+        }
+            
+            
+          
+          
+
+
 	//!
 	//! Fix the loop rate.
 	//!
@@ -139,7 +182,6 @@ void loop() {
 	}
 
 	delay(remainingTime);
-
 
 
 }
